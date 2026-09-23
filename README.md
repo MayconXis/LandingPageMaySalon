@@ -58,7 +58,7 @@ Pages, crie um arquivo `public/CNAME` com o domínio e reveja o `base` em `vite.
 ele deve voltar a ser `/`, já que o domínio próprio serve da raiz).
 
 O formulário de contato segue a mesma regra da Vercel: sem o secret `VITE_CONTACT_ENDPOINT` (em
-**Settings → Secrets and variables → Actions**), o envio fica simulado.
+**Settings → Secrets and variables → Actions**), o envio fica simulado
 
 ### Formulário de contato
 
