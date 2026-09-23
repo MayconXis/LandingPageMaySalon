@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   Design tokens (canais RGB para o Tailwind aplicar /opacidade)
+   ───────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* ── Paleta Sage Orgânico · Blush Natural · Gold Envelhecido ── */
+    --primary: 104 127 106;       /* #687F6A Sage Green — cor da marca */
+    --primary-600: 82 103 84;     /* #526754 sage escuro — fundo com ícone claro */
+    --primary-700: 62 81 63;      /* #3E513F texto sage em fundo muito claro */
+    --gold: 201 168 76;           /* #C9A84C Aged Gold — CTAs e destaques */
+    --gold-dark: 160 132 56;      /* #A08438 gold escuro — hover de CTA */
+    --background: 250 240 238;    /* #FAF0EE Ivory Rose — fundo principal */
+    --surface: 232 213 196;       /* #E8D5C4 Warm Sand — cartões e superfícies */
+    --bg-deep: 30 39 32;          /* #1E2720 Forest Night — hero e seções escuras */
+    --text: 28 23 20;             /* #1C1714 Dark Warm Brown — texto principal */
+    --text-soft: 72 60 52;        /* #483C34 corpo de texto longo */
+    --accent: 212 165 165;        /* #D4A5A5 Antique Blush — acento feminino */
+    --muted: 152 138 128;         /* #988A80 Warm Muted — decorativos */
+    --muted-strong: 110 96 88;    /* #6E6058 texto secundário acessível */
+    --line: 220 205 195;          /* #DCCDC3 divisórias finas */
+
+    --header-h: 4rem;
+    --bottom-nav-h: 4rem;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+
+    color-scheme: light;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 4.5rem;
+    }
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+  }
+
+  body {
+    @apply bg-ivory font-sans text-ink;
+    min-width: 320px;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-normal text-ink;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgb(var(--accent));
+    color: rgb(var(--text));
+  }
+
+  /* Foco visível e elegante para navegação por teclado */
+  :focus-visible {
+    outline: 2px solid rgb(var(--primary-700));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Em fundo escuro o anel de foco usa o gold (6.7:1 sobre bg-deep) */
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: rgb(var(--gold));
+  }
+
+  img {
+    @apply h-auto max-w-full;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Componentes reutilizáveis
+   ───────────────────────────────────────────── */
+@layer components {
+  /* Eyebrow sage: primary-700 no claro (7.6:1), primary-300 no escuro (6.4:1) */
+  .eyebrow {
+    @apply font-sans text-eyebrow font-medium uppercase text-primary-700;
+  }
+  .eyebrow-light {
+    @apply font-sans text-eyebrow font-medium uppercase text-primary-300;
+  }
+
+  .accent-text {
+    @apply font-accent italic;
+  }
+
+  /* Botões: altura mínima 44px (toque), micro-interação suave */
+  .btn {
+    @apply inline-flex min-h-[44px] select-none items-center justify-center gap-2 rounded-full px-6 text-[0.9375rem] font-medium tracking-[0.01em];
+    transition:
+      transform 0.4s var(--ease-silk),
+      box-shadow 0.4s var(--ease-silk),
+      background-color 0.4s var(--ease-silk),
+      color 0.4s var(--ease-silk),
+      border-color 0.4s var(--ease-silk),
+      opacity 0.4s var(--ease-silk);
+  }
+
+  .btn-sm {
+    @apply min-h-[44px] px-5 text-sm;
+  }
+
+  .btn-lg {
+    @apply min-h-[52px] px-8 text-base;
+  }
+
+  /* CTA principal: gold envelhecido com texto ink (7.8:1). Gold só aparece aqui. */
+  .btn-primary {
+    @apply bg-gold text-ink;
+  }
+
+  .btn-ghost {
+    @apply border border-ink/25 bg-transparent text-ink;
+  }
+
+  .btn-ghost-light {
+    @apply border border-ivory/40 bg-transparent text-ivory;
+  }
+
+  /* Ação de WhatsApp: mesmo sage escuro do botão flutuante (texto branco 6.1:1) */
+  .btn-whatsapp {
+    @apply bg-primary-600 text-white;
+  }
+
+  /* Ghost sage: CTA secundário em fundo claro (texto primary-700 7.1:1 no ivory, 6.1:1 no sand) */
+  .btn-ghost-sage {
+    @apply border border-primary bg-transparent text-primary-700;
+  }
+
+  @media (hover: hover) {
+    .btn:not(:disabled):hover {
+      transform: scale(1.03);
+    }
+    /* Hover: gold-dark mantém texto ink legível (5:1) */
+    .btn-primary:not(:disabled):hover {
+      @apply bg-gold-dark shadow-glow;
+    }
+    .btn-ghost:not(:disabled):hover {
+      @apply border-primary shadow-soft;
+    }
+    .btn-ghost-light:not(:disabled):hover {
+      @apply border-ivory/80;
+    }
+    .btn-whatsapp:hover {
+      @apply bg-primary-700 shadow-sage-glow;
+    }
+    .btn-ghost-sage:not(:disabled):hover {
+      @apply bg-primary-700 text-ivory shadow-sage-glow;
+    }
+  }
+
+  .btn:not(:disabled):active {
+    transform: scale(0.98);
+  }
+
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  /* Link com sublinhado que cresce da esquerda */
+  .link-underline {
+    @apply relative;
+  }
+  .link-underline::after {
+    content: '';
+    @apply absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-current;
+    transition: transform 0.5s var(--ease-silk);
+  }
+  @media (hover: hover) {
+    .link-underline:hover::after {
+      transform: scaleX(1);
+    }
+  }
+  .link-underline[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  /* Tooltip do botão flutuante: aparece no hover (só em dispositivos com mouse) e no foco */
+  .fab-tooltip {
+    @apply pointer-events-none absolute right-full top-1/2 mr-3 -translate-y-1/2 translate-x-2 whitespace-nowrap rounded-full bg-deep px-4 py-2 text-sm font-medium text-ivory opacity-0 shadow-soft ring-1 ring-ivory/15;
+    transition:
+      opacity 0.35s var(--ease-silk),
+      transform 0.35s var(--ease-silk);
+  }
+  @media (hover: hover) {
+    .fab:hover .fab-tooltip {
+      @apply translate-x-0 opacity-100;
+    }
+  }
+  .fab:focus-visible .fab-tooltip {
+    @apply translate-x-0 opacity-100;
+  }
+
+  .skip-link {
+    @apply fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-deep px-5 py-3 text-sm font-medium text-ivory shadow-lift;
+    transition: transform 0.3s var(--ease-silk);
+  }
+  .skip-link:focus {
+    @apply translate-y-0;
+  }
+
+  /* Campos de formulário: borda sage no foco, blush no erro (o erro também vem escrito, nunca só na cor) */
+  .field {
+    @apply mt-2 block w-full rounded-2xl border border-line bg-ivory px-5 py-3.5 text-base text-ink placeholder:text-muted-strong;
+    transition:
+      border-color 0.3s var(--ease-silk),
+      box-shadow 0.3s var(--ease-silk);
+  }
+  .field:focus {
+    @apply border-primary outline-none ring-1 ring-primary;
+  }
+  .field[aria-invalid='true'] {
+    @apply border-blush ring-1 ring-blush;
+  }
+
+  /* Card da equipe que vira (CSS 3D). As duas faces ocupam a mesma célula do grid,
+     então o card fica com a altura da face mais alta. */
+  .flip-card {
+    perspective: 1600px;
+  }
+  .flip-inner {
+    display: grid;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.7s var(--ease-silk);
+  }
+  .flip-inner.is-flipped {
+    transform: rotateY(180deg);
+  }
+  .flip-face {
+    grid-area: 1 / 1;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    /* A face que entra aparece na hora (já pode receber foco pelo Tab)... */
+    transition: visibility 0s linear 0s;
+  }
+  .flip-back {
+    transform: rotateY(180deg);
+  }
+  /* ...e a que sai some no meio do giro, quando está de lado: evita "vazar" em navegadores com bug de backface */
+  .flip-inner:not(.is-flipped) .flip-back,
+  .flip-inner.is-flipped .flip-front {
+    visibility: hidden;
+    transition-delay: 0.35s;
+  }
+}
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: var(--safe-bottom);
+  }
+
+  /* Espaço para o conteúdo não ficar escondido atrás da barra inferior no mobile */
+  .pb-bottom-nav {
+    padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom));
+  }
+  @media (min-width: 768px) {
+    .pb-bottom-nav {
+      padding-bottom: 0;
+    }
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Movimento reduzido: desliga animações CSS e transições longas.
+   As animações do Framer Motion são tratadas por <MotionConfig reducedMotion="user">.
+   ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
+  /* Card da equipe: troca de face na hora, sem giro */
+  .flip-face {
+    transition-delay: 0s !important;
+  }
+}

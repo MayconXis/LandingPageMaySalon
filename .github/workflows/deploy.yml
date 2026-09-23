@@ -1,0 +1,54 @@
+name: Deploy no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Permite disparar manualmente pela aba Actions, sem precisar de um novo commit
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Cancela um deploy em andamento se um novo push chegar antes de terminar
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (checa tipos + gera dist/)
+        run: npm run build
+        env:
+          # Ativa o base path "/LandingPageMaySalon/" em vite.config.ts (na Vercel isso fica ausente
+          # e o site continua servido da raiz).
+          GITHUB_PAGES: 'true'
+          # Opcional: crie o secret VITE_CONTACT_ENDPOINT em Settings → Secrets → Actions para o
+          # formulário de contato enviar de verdade. Sem ele, o envio continua simulado (ver README).
+          VITE_CONTACT_ENDPOINT: ${{ secrets.VITE_CONTACT_ENDPOINT }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
