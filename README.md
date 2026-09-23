@@ -44,7 +44,7 @@ Detalhes que já estão resolvidos:
 ### GitHub Pages
 
 O repositório já vem com um workflow pronto (`.github/workflows/deploy.yml`): a cada `git push` na
-branch `main`, ele builda o site e publica em `https://SEU-USUARIO.github.io/NOME-DO-REPO/`. Só falta
+branch `main`, ele builda o site e publica em `[https://SEU-USUARIO.github.io/NOME-DO-REPO/](https://mayconxis.github.io/LandingPageMaySalon/)`. Só falta
 um passo manual, feito uma única vez:
 
 1. No GitHub, vá em **Settings → Pages**.
